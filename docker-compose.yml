@@ -26,6 +26,7 @@ services:
       - /etc/group:/etc/group:ro
       - ./config/rclone:/etc/rclone
       - ./defaultGraph.js:/workspace/ComfyUI/web/scripts/defaultGraph.js
+      - ./defaultGraph.js:/opt/ComfyUI/web/scripts/defaultGraph.js
       ## Workspace
       - ./workspace:/workspace/:rshared
       # You can share /workspace/storage with other non-ComfyUI containers. See README
