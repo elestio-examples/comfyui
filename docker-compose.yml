@@ -1,10 +1,8 @@
 version: "3.8"
-# Compose file build variables set in .env
 services:
   supervisor:
-    image: ghcr.io/ai-dock/comfyui:latest-cpu
+    image: ghcr.io/ai-dock/comfyui:${SOFTWARE_VERSION_TAG}
     restart: always
-
     ## For Nvidia GPU's - You probably want to uncomment this
     #deploy:
     #  resources:
@@ -13,36 +11,22 @@ services:
     #        - driver: nvidia
     #          count: all
     #          capabilities: [gpu]
-
     security_opt:
       ## For Rclone mount
       - apparmor:unconfined
-      ## For AMD GPU
-      #- seccomp:unconfined
-
     cap_add:
       ## For Rclone mount
       - SYS_ADMIN
-
     devices:
       ## For Rclone mount
       - "/dev/fuse:/dev/fuse"
-      ## For AMD GPU
-      #- "/dev/kfd:/dev/kfd"
-      #- "/dev/dri:/dev/dri"
-
-    ## For AMD GPU
-    #group_add:
-    #  - video
-    #  - render
-
     volumes:
       ## For Rclone mount
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - ./config/rclone:/etc/rclone
       ## Workspace
-      - ./workspace:${WORKSPACE:-/workspace/}:rshared
+      - ./workspace:/workspace/:rshared
       # You can share /workspace/storage with other non-ComfyUI containers. See README
       #- /path/to/common_storage:${WORKSPACE:-/workspace/}storage/:rshared
 
@@ -52,27 +36,27 @@ services:
       - ./config/provisioning/default.sh:/opt/ai-dock/bin/provisioning.sh
     ports:
       # SSH available on host machine port 2222 to avoid conflict. Change to suit
-      - ${SSH_PORT_HOST:-2222}:${SSH_PORT_LOCAL:-22}
+      - 172.17.0.1:2222:${SSH_PORT_LOCAL:-22}
       # Caddy port for service portal
-      - ${SERVICEPORTAL_PORT_HOST:-1111}:${SERVICEPORTAL_PORT_HOST:-1111}
+      - 172.17.0.1:1111:${SERVICEPORTAL_PORT_HOST:-1111}
       # ComfyUI web interface
-      - 172.17.0.1:${COMFYUI_PORT_HOST:-8188}:${COMFYUI_PORT_HOST:-8188}
+      - 172.17.0.1:8188:${COMFYUI_PORT_HOST:-8188}
       # Jupyter server
-      - ${JUPYTER_PORT_HOST:-8888}:${JUPYTER_PORT_HOST:-8888}
+      - 172.17.0.1:8888:${JUPYTER_PORT_HOST:-8888}
       # Rclone webserver for interactive configuration
-      - ${RCLONE_PORT_HOST:-53682}:${RCLONE_PORT_HOST:-53682}
+      - 172.17.0.1:53682:${RCLONE_PORT_HOST:-53682}
 
     environment:
       # Don't enclose values in quotes
       - DIRECT_ADDRESS=${DIRECT_ADDRESS:-127.0.0.1}
       - DIRECT_ADDRESS_GET_WAN=${DIRECT_ADDRESS_GET_WAN:-false}
-      - WORKSPACE=${WORKSPACE:-/workspace}
+      - WORKSPACE=/workspace
       - WORKSPACE_SYNC=${WORKSPACE_SYNC:-false}
       - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN:-}
       - CF_QUICK_TUNNELS=${CF_QUICK_TUNNELS:-true}
       - WEB_ENABLE_AUTH=${WEB_ENABLE_AUTH:-true}
-      - WEB_USER=${WEB_USER:-user}
-      - WEB_PASSWORD=${WEB_PASSWORD:-password}
+      - WEB_USER=admin
+      - WEB_PASSWORD=${ADMIN_PASSWORD}
       - SSH_PORT_HOST=${SSH_PORT_HOST:-2222}
       - SSH_PORT_LOCAL=${SSH_PORT_LOCAL:-22}
       - SERVICEPORTAL_PORT_HOST=${SERVICEPORTAL_PORT_HOST:-1111}
