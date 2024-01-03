@@ -25,6 +25,7 @@ services:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
       - ./config/rclone:/etc/rclone
+      - ./defaultGraph.js:/workspace/ComfyUI/web/scripts/defaultGraph.js
       ## Workspace
       - ./workspace:/workspace/:rshared
       # You can share /workspace/storage with other non-ComfyUI containers. See README
@@ -35,16 +36,16 @@ services:
       - ./config/authorized_keys:/root/.ssh/authorized_keys_mount
       - ./config/provisioning/default.sh:/opt/ai-dock/bin/provisioning.sh
     ports:
-      # SSH available on host machine port 2222 to avoid conflict. Change to suit
-      - 172.17.0.1:2222:${SSH_PORT_LOCAL:-22}
-      # Caddy port for service portal
-      - 172.17.0.1:1111:${SERVICEPORTAL_PORT_HOST:-1111}
+      # # SSH available on host machine port 2222 to avoid conflict. Change to suit
+      # - 172.17.0.1:2222:${SSH_PORT_LOCAL:-22}
+      # # Caddy port for service portal
+      # - 172.17.0.1:1111:${SERVICEPORTAL_PORT_HOST:-1111}
       # ComfyUI web interface
       - 172.17.0.1:8188:${COMFYUI_PORT_HOST:-8188}
-      # Jupyter server
-      - 172.17.0.1:8888:${JUPYTER_PORT_HOST:-8888}
-      # Rclone webserver for interactive configuration
-      - 172.17.0.1:53682:${RCLONE_PORT_HOST:-53682}
+      # # Jupyter server
+      # - 172.17.0.1:8888:${JUPYTER_PORT_HOST:-8888}
+      # # Rclone webserver for interactive configuration
+      # - 172.17.0.1:53682:${RCLONE_PORT_HOST:-53682}
 
     environment:
       # Don't enclose values in quotes
@@ -57,16 +58,16 @@ services:
       - WEB_ENABLE_AUTH=${WEB_ENABLE_AUTH:-true}
       - WEB_USER=admin
       - WEB_PASSWORD=${ADMIN_PASSWORD}
-      - SSH_PORT_HOST=${SSH_PORT_HOST:-2222}
-      - SSH_PORT_LOCAL=${SSH_PORT_LOCAL:-22}
-      - SERVICEPORTAL_PORT_HOST=${SERVICEPORTAL_PORT_HOST:-1111}
-      - SERVICEPORTAL_PORT_LOCAL=${SERVICEPORTAL_PORT_LOCAL:-11111}
-      - SERVICEPORTAL_METRICS_PORT=${SERVICEPORTAL_METRICS_PORT:-21111}
-      - COMFYUI_FLAGS=${COMFYUI_FLAGS:-}
+      # - SSH_PORT_HOST=${SSH_PORT_HOST:-2222}
+      # - SSH_PORT_LOCAL=${SSH_PORT_LOCAL:-22}
+      # - SERVICEPORTAL_PORT_HOST=${SERVICEPORTAL_PORT_HOST:-1111}
+      # - SERVICEPORTAL_PORT_LOCAL=${SERVICEPORTAL_PORT_LOCAL:-11111}
+      # - SERVICEPORTAL_METRICS_PORT=${SERVICEPORTAL_METRICS_PORT:-21111}
+      # - COMFYUI_FLAGS=${COMFYUI_FLAGS:-}
       - COMFYUI_PORT_HOST=${COMFYUI_PORT_HOST:-8188}
-      - COMFYUI_PORT_LOCAL=${COMFYUI_PORT_LOCAL:-18188}
-      - COMFYUI_METRICS_PORT=${COMFYUI_METRICS_PORT:-28188}
-      - JUPYTER_PORT_HOST=${JUPYTER_PORT_HOST:-8888}
-      - JUPYTER_PORT_LOCAL=${JUPYTER_PORT_LOCAL:-18888}
-      - JUPYTER_METRICS_PORT=${JUPYTER_METRICS_PORT:-28888}
+      # - COMFYUI_PORT_LOCAL=${COMFYUI_PORT_LOCAL:-18188}
+      # - COMFYUI_METRICS_PORT=${COMFYUI_METRICS_PORT:-28188}
+      # - JUPYTER_PORT_HOST=${JUPYTER_PORT_HOST:-8888}
+      # - JUPYTER_PORT_LOCAL=${JUPYTER_PORT_LOCAL:-18888}
+      # - JUPYTER_METRICS_PORT=${JUPYTER_METRICS_PORT:-28888}
       - SERVERLESS=${SERVERLESS:-false}

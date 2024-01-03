@@ -7,38 +7,6 @@ ports:
     public: true
     path: "/"
     isAuth: false
-  - protocol: "HTTPS"
-    targetProtocol: "HTTP"
-    listeningPort: "2223"
-    targetPort: "2222"
-    targetIP: "172.17.0.1"
-    public: true
-    path: "/"
-    isAuth: false
-  - protocol: "HTTPS"
-    targetProtocol: "HTTP"
-    listeningPort: "1113"
-    targetPort: "1111"
-    targetIP: "172.17.0.1"
-    public: true
-    path: "/"
-    isAuth: false
-  - protocol: "HTTPS"
-    targetProtocol: "HTTP"
-    listeningPort: "8883"
-    targetPort: "8888"
-    targetIP: "172.17.0.1"
-    public: true
-    path: "/"
-    isAuth: false
-  - protocol: "HTTPS"
-    targetProtocol: "HTTP"
-    listeningPort: "53683"
-    targetPort: "53682"
-    targetIP: "172.17.0.1"
-    public: true
-    path: "/"
-    isAuth: false
 environments:
   - key: "ADMIN_PASSWORD"
     value: "random_password"
