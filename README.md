@@ -42,3 +42,7 @@ To seamlessly pull a model for your project, follow these straightforward steps:
 ## Model Availability
 
 With these steps completed, your model is now available for use in your project.
+
+## Documentation
+
+For more detailed information and some examples about the Comfyui and its features, please refer to the documentation available <a target="_blank" href="https://comfyanonymous.github.io/ComfyUI_examples/">here</a>.
