@@ -9,4 +9,7 @@ sleep 90s;
 docker-compose down;
 docker-compose up -d;
 
-sleep 60s;
+sleep 300s;
+
+docker-compose down;
+docker-compose up -d;
