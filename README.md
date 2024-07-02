@@ -13,7 +13,7 @@ Deploy ComfyUI server with CI/CD on Elestio
 You can open ComfyUI here:
 
     URL: https://[CI_CD_DOMAIN]
-    login: admin
+    login: root
     password: [ADMIN_PASSWORD]
 
 # Pulling a Model

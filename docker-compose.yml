@@ -2,31 +2,32 @@ version: "3.8"
 services:
   supervisor:
     image: ghcr.io/ai-dock/comfyui:${SOFTWARE_VERSION_TAG}
+    platform: linux/amd64
     restart: always
     ## For Nvidia GPU's - You probably want to uncomment this
-    #deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
-    #        - driver: nvidia
-    #          count: all
-    #          capabilities: [gpu]
-    security_opt:
-      ## For Rclone mount
-      - apparmor:unconfined
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # security_opt:
+    #   ## For Rclone mount
+    #   - apparmor:unconfined
     cap_add:
       ## For Rclone mount
       - SYS_ADMIN
     devices:
       ## For Rclone mount
-      - "/dev/fuse:/dev/fuse"
+      - "/dev/dri:/dev/dri"
     volumes:
       ## For Rclone mount
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-      - ./config/rclone:/etc/rclone
-      - ./defaultGraph.js:/workspace/ComfyUI/web/scripts/defaultGraph.js
-      - ./defaultGraph.js:/opt/ComfyUI/web/scripts/defaultGraph.js
+      # - /etc/passwd:/etc/passwd:ro
+      # - /etc/group:/etc/group:ro
+      # - ./config/rclone:/etc/rclone
+      # - ./defaultGraph.js:/workspace/ComfyUI/web/scripts/defaultGraph.js
+      # - ./defaultGraph.js:/opt/ComfyUI/web/scripts/defaultGraph.js
       ## Workspace
       - ./workspace:/workspace/:rshared
       # You can share /workspace/storage with other non-ComfyUI containers. See README
@@ -50,15 +51,15 @@ services:
 
     environment:
       # Don't enclose values in quotes
-      - DIRECT_ADDRESS=${DIRECT_ADDRESS:-127.0.0.1}
+      # - DIRECT_ADDRESS=${DIRECT_ADDRESS:-127.0.0.1}
       - DIRECT_ADDRESS_GET_WAN=${DIRECT_ADDRESS_GET_WAN:-false}
       - WORKSPACE=/workspace
       - WORKSPACE_SYNC=${WORKSPACE_SYNC:-false}
       - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN:-}
       - CF_QUICK_TUNNELS=${CF_QUICK_TUNNELS:-true}
-      - WEB_ENABLE_AUTH=${WEB_ENABLE_AUTH:-true}
-      - WEB_USER=admin
-      - WEB_PASSWORD=${ADMIN_PASSWORD}
+      - WEB_ENABLE_AUTH=${WEB_ENABLE_AUTH:-false}
+      # - WEB_USER=admin
+      # - WEB_PASSWORD=${ADMIN_PASSWORD}
       # - SSH_PORT_HOST=${SSH_PORT_HOST:-2222}
       # - SSH_PORT_LOCAL=${SSH_PORT_LOCAL:-22}
       # - SERVICEPORTAL_PORT_HOST=${SERVICEPORTAL_PORT_HOST:-1111}

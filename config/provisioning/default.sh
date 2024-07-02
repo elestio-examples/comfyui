@@ -1,16 +1,21 @@
-#!/bin/false
+#!/bin/bash
 
 # This file will be sourced in init.sh
 
 # https://raw.githubusercontent.com/ai-dock/comfyui/main/config/provisioning/default.sh
 
+# Packages are installed after nodes so we can fix them...
+
+PYTHON_PACKAGES=(
+    #"opencv-python==4.7.0.72"
+)
 
 NODES=(
     "https://github.com/ltdrdata/ComfyUI-Manager"
 )
 
 CHECKPOINT_MODELS=(
-    # "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
+    "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
     "https://huggingface.co/stabilityai/sdxl-turbo/resolve/main/sd_xl_turbo_1.0_fp16.safetensors"
     "https://huggingface.co/stabilityai/sdxl-turbo/resolve/main/sd_xl_turbo_1.0.safetensors"
     #"https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt"
@@ -62,6 +67,7 @@ function provisioning_start() {
     DISK_GB_ALLOCATED=$(($DISK_GB_AVAILABLE + $DISK_GB_USED))
     provisioning_print_header
     provisioning_get_nodes
+    provisioning_install_python_packages
     provisioning_get_models \
         "${WORKSPACE}/storage/stable_diffusion/models/ckpt" \
         "${CHECKPOINT_MODELS[@]}"
@@ -101,6 +107,12 @@ function provisioning_get_nodes() {
             fi
         fi
     done
+}
+
+function provisioning_install_python_packages() {
+    if [ ${#PYTHON_PACKAGES[@]} -gt 0 ]; then
+        micromamba -n comfyui run ${PIP_INSTALL} ${PYTHON_PACKAGES[*]}
+    fi
 }
 
 function provisioning_get_models() {
