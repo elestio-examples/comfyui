@@ -11,7 +11,7 @@ docker-compose up -d;
 
 sleep 20s;
 
-target=$(docker-compose supervisor 8188);
+target=$(docker-compose port supervisor 8188);
 curl http://${target}
 
 sleep 300s;
